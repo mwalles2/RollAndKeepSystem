@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Die  {
+public struct Die: Codable  {
 	/// Number of sides the die has
 	public let sides: Int
 

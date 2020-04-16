@@ -7,12 +7,13 @@
 
 import Foundation
 
-public protocol DicePool {
-	var dice: [Die] { get }
-	func roll() -> [DieResult]
-}
+public struct DicePool: Codable {
+	var dice: [Die]
 
-extension DicePool {
+	public init(dice: [Die]) {
+		self.dice = dice
+	}
+
 	public func rollDice() -> [DieResult] {
 		return dice.map { die in
 			die.roll()

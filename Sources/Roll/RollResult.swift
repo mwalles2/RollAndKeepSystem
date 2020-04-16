@@ -8,22 +8,18 @@
 import Die
 import Foundation
 
-public struct RollResult {
+public protocol RollResult {
 	/// <#Description#>
-	public let total: Int
+	var total: Int { get }
 
-	public let diceResults: [DieResult]
+	var diceResults: [DieResult] { get }
 
 	/// <#Description#>
-	public var result: String {
-		return diceResults.map { $0.result }.joined(separator: ", ")
-	}
+	var result: String { get }
 
-	public init(values: [DieResult]) {
-		total = values.reduce(0) { (result, new) in
-			return result + new.total
-		}
-
-		diceResults = values
-	}
 }
+//{
+//		return diceResults.map { $0.result }.joined(separator: ", ")
+//	}
+//
+//}
