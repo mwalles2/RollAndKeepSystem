@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "RollKeep",
+    name: "RollAndKeepSystem",
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
 		.library(
@@ -14,8 +14,8 @@ let package = Package(
 			name: "Roll",
 			targets: ["Roll"]),
         .library(
-            name: "RollKeep",
-            targets: ["RollKeep"]),
+            name: "RollAndKeepSystem",
+            targets: ["RollAndKeepSystem"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -31,10 +31,10 @@ let package = Package(
             name: "Roll",
             dependencies: ["Die"]),
         .target(
-            name: "RollKeep",
+            name: "RollAndKeepSystem",
             dependencies: ["Die", "Roll"]),
         .testTarget(
-            name: "RollKeepTests",
-            dependencies: ["RollKeep"]),
+            name: "RollAndKeepSystemTests",
+            dependencies: ["RollAndKeepSystem"]),
     ]
 )
