@@ -14,10 +14,15 @@ struct RollAndKeepRollResult: RollResult {
 
 	var diceResults: [DieResult]
 
+	var diceRolled: String {
+		// Will need to update this so that it shows free raises and static additions
+		return "\(diceResults.count)k\(keep)"
+	}
+
 	var result: String {
 		let kept = diceResults.dropLast(diceResults.count - keep).map { $0.result }
 		let dropped = diceResults.dropFirst(keep).map { $0.result }
-		return "Kept: \(kept.joined(separator: ", ")), Dropped: \(dropped.joined(separator: ", "))"
+		return "Kept: \(kept.joined(separator: ", "))\nDropped: \(dropped.count > 0 ? dropped.joined(separator: ", ") : "None")"
 	}
 
 	private let keep: Int

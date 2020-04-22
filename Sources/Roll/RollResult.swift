@@ -17,9 +17,22 @@ public protocol RollResult {
 	/// <#Description#>
 	var result: String { get }
 
+	var diceRolled: String { get }
 }
-//{
-//		return diceResults.map { $0.result }.joined(separator: ", ")
-//	}
-//
-//}
+
+extension RollResult {
+	var diceRolled: String {
+		var dice = [Int: Int]()
+		for result in diceResults {
+			if let value = dice[result.sides] {
+				dice[result.sides] = value + 1
+			} else {
+				dice[result.sides] = 1
+			}
+		}
+		let numberOfDice = dice.map { (sides: Int, number: Int) in
+			return "\(number)d\(sides)"
+		}
+		return numberOfDice.joined(separator: ", ")
+	}
+}
