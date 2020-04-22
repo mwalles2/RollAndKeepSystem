@@ -54,33 +54,7 @@ public struct Die: Codable  {
 			keepRolling = explodeOn.contains(roll) && !explodeOnce
 		}
 
-		return DieResult(values: rolls)
-	}
-}
-
-public struct DieResult {
-	/// <#Description#>
-	public private(set) var total: Int
-
-	/// <#Description#>
-	public private(set) var result: String
-
-	public init(values: [Int]) {
-		total = values.reduce(0) { (result, new) in
-			return result + new
-		}
-
-		result = values.map { "\($0)" }.joined(separator: " + ")
-	}
-
-	public init(value: Int) {
-		total = value
-		result = "\(value)"
-	}
-
-	public mutating func add(_ value: Int) {
-		total = total + value
-		result = result + " + \(value)"
+		return DieResult(values: rolls, sides: sides)
 	}
 }
 
