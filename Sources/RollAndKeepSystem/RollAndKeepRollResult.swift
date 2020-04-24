@@ -10,13 +10,23 @@ import Foundation
 import Roll
 
 struct RollAndKeepRollResult: RollResult {
-	var total: Int
+	private(set) var total: Int
 
-	var diceResults: [DieResult]
+	private(set) var diceResults: [DieResult]
 
 	var diceRolled: String {
-		// Will need to update this so that it shows free raises and static additions
-		return "\(diceResults.count)k\(keep)"
+		// Will need to update this so that it shows free raises and static addition
+
+		func x(value: Int, description: String) -> String {
+			if value == 0 {
+				return ""
+			}
+			let sign = value > 0 ? "+" : "-"
+			return " \(sign) \(abs(value)) (\(description)"
+		}
+		let rollBonusDescription = x(value: rollBonus, description: "10k10 bonus")
+
+		return "\(diceResults.count)k\(keep)\(rollBonusDescription)"
 	}
 
 	var result: String {
@@ -26,13 +36,17 @@ struct RollAndKeepRollResult: RollResult {
 	}
 
 	private let keep: Int
+	private let rollBonus: Int
+	private let staticBonus: Int
 
-	init(values: [DieResult], keep: Int) {
+	init(values: [DieResult], keep: Int, rollBonus: Int) {
 		diceResults = values.sorted { $0.total > $1.total }
-		total = diceResults.dropLast(diceResults.count - keep).reduce(0) { (result, new) in
+		total = rollBonus + diceResults.dropLast(diceResults.count - keep).reduce(0) { (result, new) in
 			return result + new.total
 		}
 
 		self.keep = keep
+		self.rollBonus = rollBonus
+		staticBonus = 0
 	}
 }
