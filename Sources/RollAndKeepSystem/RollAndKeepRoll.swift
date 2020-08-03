@@ -28,7 +28,12 @@ public struct RollAndKeepRoll: Roll {
 		return RollAndKeepRollResult(values: pool.rollDice(), keep: diceActuallyKept, rollBonus: rollBonus)
 	}
 
-	public init(name: String, roll diceToRoll: Int, keep diceToKeep: Int, bonus: Int? = nil) {
+	public init(name: String,
+				roll diceToRoll: Int,
+				keep diceToKeep: Int,
+				bonus: Int? = nil,
+				explodeOn9: Bool = false,
+				emphasis: Bool = false) {
 		let roll: Int
 		let keep: Int
 
@@ -48,8 +53,22 @@ public struct RollAndKeepRoll: Roll {
 			rollBonus = 0
 		}
 
+		let d10 = Die.d10()
 		self.name = name
-		pool = DicePool(dice: (1 ... roll).map { _ in Die.d10().exploding()})
+		pool = DicePool(dice: (1 ... roll).map { _ in
+			let die: Die
+			if explodeOn9 {
+				die = d10.explode(on: [9, 10])
+			} else {
+				die = d10.exploding()
+			}
+
+			if emphasis {
+				return die.reroll(on: [1])
+			} else {
+				return die
+			}
+		})
 		self.diceToRoll = diceToRoll
 		self.diceToKeep = diceToKeep
 		self.bonus = bonus

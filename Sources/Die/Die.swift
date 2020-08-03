@@ -74,4 +74,12 @@ extension Die {
 				   rerollOn: rerollOn,
 				   multipleRerolls: multipleRerolls)
 	}
+
+	public func reroll(on rerollOn: [Int]) -> Die {
+		return Die(sides: sides,
+				   explodeOn: explodeOn,
+				   explodeOnce: explodeOnce,
+				   rerollOn: rerollOn,
+				   multipleRerolls: multipleRerolls)
+	}
 }
