@@ -44,6 +44,7 @@ public struct Die: Codable  {
 		var firstRoll = Int.random(in: range)
 		while rerollOn.contains(firstRoll) {
 			firstRoll = Int.random(in: range)
+			// add a count and a way to output how many dice where rerolled
 		}
 		rolls.append(firstRoll)
 		var keepRolling = !explodeOn.isEmpty && explodeOn.contains(firstRoll)

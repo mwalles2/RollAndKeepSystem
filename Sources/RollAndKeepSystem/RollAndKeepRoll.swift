@@ -25,7 +25,10 @@ public struct RollAndKeepRoll: Roll {
 		// emphasis Bool
 		// freeRaises: Int
 		// calledRaises: Int
-		return RollAndKeepRollResult(values: pool.rollDice(), keep: diceActuallyKept, rollBonus: rollBonus)
+		return RollAndKeepRollResult(values: pool.rollDice(),
+									 keep: diceActuallyKept,
+									 rollBonus: rollBonus,
+									 staticBonus: bonus ?? 0)
 	}
 
 	public init(name: String,
@@ -75,6 +78,13 @@ public struct RollAndKeepRoll: Roll {
 	}
 
 	public func rollRepresentation() -> String {
+		if let bonus = bonus {
+			if bonus > 0 {
+				return "\(diceToRoll)k\(diceToKeep) + \(bonus)"
+			} else if bonus < 0 {
+				return "\(diceToRoll)k\(diceToKeep) - \(abs(bonus))"
+			}
+		}
 		return "\(diceToRoll)k\(diceToKeep)"
 	}
 }
