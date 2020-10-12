@@ -44,6 +44,7 @@ public struct Die: Codable  {
 		var firstRoll = Int.random(in: range)
 		while rerollOn.contains(firstRoll) {
 			firstRoll = Int.random(in: range)
+			// add a count and a way to output how many dice where rerolled
 		}
 		rolls.append(firstRoll)
 		var keepRolling = !explodeOn.isEmpty && explodeOn.contains(firstRoll)
@@ -70,6 +71,14 @@ extension Die {
 	public func exploding() -> Die {
 		return Die(sides: sides,
 				   explodeOn: [sides],
+				   explodeOnce: explodeOnce,
+				   rerollOn: rerollOn,
+				   multipleRerolls: multipleRerolls)
+	}
+
+	public func reroll(on rerollOn: [Int]) -> Die {
+		return Die(sides: sides,
+				   explodeOn: explodeOn,
 				   explodeOnce: explodeOnce,
 				   rerollOn: rerollOn,
 				   multipleRerolls: multipleRerolls)
