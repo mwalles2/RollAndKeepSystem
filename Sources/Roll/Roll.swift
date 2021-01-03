@@ -9,8 +9,6 @@ import Die
 import Foundation
 
 public protocol Roll: Codable {
-	var name: String { get }
-	var pool: DicePool { get }
 
 	func roll() -> RollResult
 

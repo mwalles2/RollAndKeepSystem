@@ -76,13 +76,13 @@ public struct RollAndKeepRoll: Roll {
 		pool = DicePool(dice: (1 ... roll).map { _ in
 			let die: Die
 			if explodeOn9 {
-				die = d10.explode(on: [9, 10])
+				die = d10.explode(on: [.indefinatly(9), .indefinatly(10)])
 			} else {
 				die = d10.exploding()
 			}
 
 			if emphasis {
-				return die.reroll(on: [1])
+				return die.reroll(on: [.firstRoll(1)])
 			} else {
 				return die
 			}

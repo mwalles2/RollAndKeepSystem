@@ -33,6 +33,9 @@ let package = Package(
         .target(
             name: "RollAndKeepSystem",
             dependencies: ["Die", "Roll"]),
+		.testTarget(
+			name: "DieTests",
+			dependencies: ["Die"]),
         .testTarget(
             name: "RollAndKeepSystemTests",
             dependencies: ["RollAndKeepSystem"]),
