@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Die",
+        "repositoryURL": "git@github.com:mwalles2/Die.git",
+        "state": {
+          "branch": null,
+          "revision": "078b0473efb465679162712dc0d2a02026e68d49",
+          "version": "1.0.0-beta.1"
+        }
+      },
+      {
+        "package": "Roll",
+        "repositoryURL": "git@github.com:mwalles2/Roll.git",
+        "state": {
+          "branch": null,
+          "revision": "852284a00ee650e99062a2f6dd75487811bfe6e8",
+          "version": "1.0.0-beta.1.0.1"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
