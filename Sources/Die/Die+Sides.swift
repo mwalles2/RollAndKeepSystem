@@ -31,5 +31,4 @@ extension Die {
 	public static func d20() -> Die {
 		return Die(sides: 20)
 	}
-
 }

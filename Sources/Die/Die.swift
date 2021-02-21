@@ -7,80 +7,83 @@
 
 import Foundation
 
-public struct Die: Codable  {
+public struct Die: Codable {
 	/// Number of sides the die has
 	public let sides: Int
 
 	/// What values to explode on
-	public let explodeOn: [Int]
-
-	public let explodeOnce: Bool
+	public let explodeOn: [ExtendedDieOptions]
 
 	/// What values to reroll on
-	public let rerollOn: [Int]
-
-	public let multipleRerolls: Bool
+	public let rerollOn: [ExtendedDieOptions]
 
 	private var range:ClosedRange<Int> {
 		return 1 ... sides
 	}
 
 	public init(sides: Int,
-		 explodeOn: [Int] = [Int](),
-		 explodeOnce: Bool = false,
-		 rerollOn: [Int] = [Int](),
-		 multipleRerolls: Bool = false) {
+		 explodeOn: [ExtendedDieOptions] = [ExtendedDieOptions](),
+		 rerollOn: [ExtendedDieOptions] = [ExtendedDieOptions]()) {
 		self.sides = sides
 		self.explodeOn = explodeOn
-		self.explodeOnce = explodeOnce
 		self.rerollOn = rerollOn
-		self.multipleRerolls = multipleRerolls
 	}
 
 	/// Rolls the die
 	/// - Returns: <#description#>
+//	public func roll(_ random: (ClosedRange<Int>) -> Int = Int.random) -> DieResult {
 	public func roll() -> DieResult {
-		var rolls = [Int]()
-		var firstRoll = Int.random(in: range)
-		while rerollOn.contains(firstRoll) {
-			firstRoll = Int.random(in: range)
-			// add a count and a way to output how many dice where rerolled
+		let roll = Int.random(in: range)
+		func extendRoll() -> DieResult {
+			let die = Die(sides: sides,
+						  explodeOn: explodeOn.filter({
+							switch $0 {
+							case .firstRoll(_):
+								return false
+							case .indefinatly(_):
+								return true
+							}
+						  }),
+						  rerollOn: rerollOn.filter({
+							switch $0 {
+							case .firstRoll(_):
+								return false
+							case .indefinatly(_):
+								return true
+							}
+						  })
+			)
+			return die.roll()
 		}
-		rolls.append(firstRoll)
-		var keepRolling = !explodeOn.isEmpty && explodeOn.contains(firstRoll)
-
-		while keepRolling {
-			let roll = Int.random(in: range)
-			rolls.append(roll)
-			keepRolling = explodeOn.contains(roll) && !explodeOnce
+		let extendedResult: ExtendedResult?
+		if rerollOn.contains(where: { $0.value() == roll }) {
+			extendedResult = .reroll(extendRoll())
+		} else if explodeOn.contains(where: { $0.value() == roll }) {
+			extendedResult = .explode(extendRoll())
+		} else {
+			extendedResult = nil
 		}
 
-		return DieResult(values: rolls, sides: sides)
+		return DieResult(value: roll, sides: sides, extendedResult: extendedResult)
 	}
 }
 
 extension Die {
-	public func explode(on explodeOn: [Int]) -> Die {
+	public func explode(on explodeOn: [ExtendedDieOptions]) -> Die {
 		return Die(sides: sides,
 				   explodeOn: explodeOn,
-				   explodeOnce: explodeOnce,
-				   rerollOn: rerollOn,
-				   multipleRerolls: multipleRerolls)
+				   rerollOn: rerollOn)
 	}
 
 	public func exploding() -> Die {
 		return Die(sides: sides,
-				   explodeOn: [sides],
-				   explodeOnce: explodeOnce,
-				   rerollOn: rerollOn,
-				   multipleRerolls: multipleRerolls)
+				   explodeOn: [.indefinatly(sides)],
+				   rerollOn: rerollOn)
 	}
 
-	public func reroll(on rerollOn: [Int]) -> Die {
+	public func reroll(on rerollOn: [ExtendedDieOptions]) -> Die {
 		return Die(sides: sides,
 				   explodeOn: explodeOn,
-				   explodeOnce: explodeOnce,
-				   rerollOn: rerollOn,
-				   multipleRerolls: multipleRerolls)
+				   rerollOn: rerollOn)
 	}
 }
